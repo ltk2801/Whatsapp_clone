@@ -60,3 +60,19 @@ export const createUser = async (userData) => {
 
   return user;
 };
+
+export const signUser = async (email, password) => {
+  const user = await UserModel.findOne({ email: email.toLowerCase() }).lean();
+
+  // check if user exist
+  if (!user) {
+    throw createHttpError.NotFound("Nhập sai địa chỉ email");
+  }
+
+  // compare passwords
+  let passwordMatches = await bcryptjs.compare(password, user.password);
+  if (!passwordMatches) {
+    throw createHttpError.NotFound("Nhập sai password ");
+  }
+  return user;
+};
