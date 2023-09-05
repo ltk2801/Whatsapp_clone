@@ -36,13 +36,13 @@ export const register = async (req, res, next) => {
     res.status(200).json({
       status: true,
       message: "Đăng ký tài khoản người dùng thành công !",
-      access_token,
       user: {
         _id: newUser._id,
         name: newUser.name,
         email: newUser.email,
         picture: newUser.picture,
         status: newUser.status,
+        access_token,
       },
     });
   } catch (error) {
@@ -77,13 +77,13 @@ export const login = async (req, res, next) => {
     res.status(200).json({
       status: true,
       message: "Đăng nhập thành công !",
-      access_token,
       user: {
         _id: user._id,
         name: user.name,
         email: user.email,
         picture: user.picture,
         status: user.status,
+        access_token,
       },
     });
   } catch (error) {
@@ -122,13 +122,13 @@ export const refreshToken = async (req, res, next) => {
     res.status(200).json({
       status: true,
       message: "Refresh token thành công",
-      access_token,
       user: {
         _id: user._id,
         name: user.name,
         email: user.email,
         picture: user.picture,
         status: user.status,
+        access_token,
       },
     });
   } catch (error) {

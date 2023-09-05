@@ -14,9 +14,9 @@ export const createUser = async (userData) => {
   }
 
   // check name length
-  if (!validator.isLength(name, { min: 2, max: 30 })) {
+  if (!validator.isLength(name, { min: 2, max: 45 })) {
     throw createHttpError.BadRequest(
-      "Họ và tên phải nhiều hơn 2 và ít hơn 30 ký tự"
+      "Họ và tên phải nhiều hơn 2 và ít hơn 45 ký tự"
     );
   }
 
