@@ -1,8 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import userSlice from "../features/userSlice";
 import createFilter from "redux-persist-transform-filter";
+// slices
+import userSlice from "../features/userSlice";
 
 // saveUserOnlyFilter
 const saveUserOnlyFilter = createFilter("user", ["user"]);
