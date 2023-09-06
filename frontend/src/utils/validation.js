@@ -16,5 +16,16 @@ export const signUpSchema = Yup.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
       "Mật khẩu phải chứa ít nhất 6 ký tự, gồm 1 ký tự in hoa, 1 ký tự thường, 1 số và 1 ký tự đặc biệt"
     )
+    .min(6, "Mật khẩu phải nhiều hơn 6 ký tự")
+    .max(128, "Mật khẩu phải ít hơn 128 ký tự"),
+});
+
+export const signInSchema = Yup.object({
+  email: Yup.string()
+    .required("Vui lòng nhập địa chỉ email")
+    .email("Địa chỉ email không chính xác"),
+  password: Yup.string()
+    .required("Vui lòng nhập mật khẩu.")
+    .min(6, "Mật khẩu phải nhiều hơn 6 ký tự")
     .max(128, "Mật khẩu phải ít hơn 128 ký tự"),
 });

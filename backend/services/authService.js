@@ -66,13 +66,13 @@ export const signUser = async (email, password) => {
 
   // check if user exist
   if (!user) {
-    throw createHttpError.NotFound("Nhập sai địa chỉ email");
+    throw createHttpError.NotFound("Email không tồn tại trong hệ thống");
   }
 
   // compare passwords
   let passwordMatches = await bcryptjs.compare(password, user.password);
   if (!passwordMatches) {
-    throw createHttpError.NotFound("Nhập sai password ");
+    throw createHttpError.NotFound("Mật khẩu không đúng ");
   }
   return user;
 };
