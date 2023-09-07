@@ -28,8 +28,8 @@ export const create_open_conversation = async (req, res, next) => {
     if (existed_conversation) {
       res.status(200).json(existed_conversation);
     } else {
-      let receiver_user = await findUser(receiver_id);
-      let convoData = {
+      const receiver_user = await findUser(receiver_id);
+      const convoData = {
         name: receiver_user.name,
         isGroup: false,
         users: [sender_id, receiver_id],

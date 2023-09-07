@@ -16,7 +16,7 @@ export const doesConversationExist = async (sender_id, receiver_id) => {
   if (!convos) throw createHttpError.BadRequest("Oops... Đã có lỗi xảy ra !");
 
   // populate message model
-  // Nối thông tin của trường "latestMessage" trong mô hình
+  // Nối thông tin của trường "latestMessage.sender" trong mô hình, nghĩa là ở trường latesestMessage vô trường sender lấy hết thông tin của người gửi
   convos = await UserModel.populate(convos, {
     path: "latestMessage.sender",
     select: "name email picture status",
@@ -63,4 +63,14 @@ export const getUserConversations = async (user_id) => {
       throw createHttpError.BadRequest("Oops... Đã có lỗi xảy ra !");
     });
   return conversations;
+};
+
+export const updateLatestMessage = async (convo_id, msg) => {
+  const updatedConvo = await ConversationModel.findByIdAndUpdate(convo_id, {
+    latestMessage: msg,
+  });
+  if (!updatedConvo) {
+    throw createHttpError.BadRequest("Oops... Đã có lỗi xảy ra !");
+  }
+  return updatedConvo;
 };

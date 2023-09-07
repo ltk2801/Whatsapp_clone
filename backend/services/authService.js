@@ -70,7 +70,7 @@ export const signUser = async (email, password) => {
   }
 
   // compare passwords
-  let passwordMatches = await bcryptjs.compare(password, user.password);
+  const passwordMatches = await bcryptjs.compare(password, user.password);
   if (!passwordMatches) {
     throw createHttpError.NotFound("Mật khẩu không đúng ");
   }
