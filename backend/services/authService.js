@@ -1,6 +1,6 @@
 import createHttpError from "http-errors";
 import validator from "validator";
-import UserModel from "../models/userModel.js";
+import { UserModel } from "../models/index.js";
 import bcryptjs from "bcryptjs";
 
 const { DEFAULT_STATUS, DEFAULT_PICTURE } = process.env;
