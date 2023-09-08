@@ -1,0 +1,38 @@
+import React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getConversationMessages } from "../../features/chatSlice";
+
+import ChatHeader from "./header/ChatHeader";
+import ChatMessages from "./messages/ChatMessages";
+
+const ChatContainer = () => {
+  const { activeConversation } = useSelector((state) => state.chat);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { access_token } = user;
+
+  useEffect(() => {
+    if (activeConversation?._id) {
+      dispatch(
+        getConversationMessages({
+          token: access_token,
+          convo_id: activeConversation?._id,
+        })
+      );
+    }
+  }, [activeConversation, access_token, dispatch]);
+  return (
+    <div className="relative w-full border-l dark:border-l-dark_border_2 select-none overflow-hidden">
+      {/* Container */}
+      <div>
+        {/* Chat Header */}
+        <ChatHeader />
+        {/* Chat messages */}
+        <ChatMessages />
+      </div>
+    </div>
+  );
+};
+
+export default ChatContainer;

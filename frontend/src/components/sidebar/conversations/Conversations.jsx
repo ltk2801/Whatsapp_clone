@@ -4,7 +4,6 @@ import Conversation from "./Conversation";
 
 const Conversations = () => {
   const { conversations } = useSelector((state) => state.chat);
-
   return (
     <div className="convos scrollbar">
       <ul>
