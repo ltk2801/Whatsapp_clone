@@ -19,9 +19,9 @@ const Home = () => {
     dispatch(resetActiveConversation());
   }, [dispatch, user]);
   return (
-    <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center py-[19px] overflow-hidden">
+    <div className="min-h-screen dark:bg-dark_bg_1 flex items-center justify-center  overflow-hidden">
       {/* container */}
-      <div className="container  flex">
+      <div className="container h-screen py-[19px] flex ">
         {/* Sidebar */}
         <Sidebar />
         {activeConversation._id ? <ChatContainer /> : <WhatsappHome />}
