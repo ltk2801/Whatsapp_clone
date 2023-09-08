@@ -74,6 +74,33 @@ export const getConversationMessages = createAsyncThunk(
   }
 );
 
+export const sendMessages = createAsyncThunk(
+  "message/send",
+  async (values, { rejectWithValue }) => {
+    const { token, convo_id, message, files } = values;
+    try {
+      const { data } = await axios.post(
+        MESSAGE_ENDPOINT,
+        {
+          message,
+          convo_id,
+          files,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // trả về response
+      return data;
+    } catch (error) {
+      // ở đây ra về message trong error khi lỗi
+      return rejectWithValue(error.response.data.error.message);
+    }
+  }
+);
+
 export const chatSlice = createSlice({
   name: "chat",
   initialState,
@@ -123,6 +150,29 @@ export const chatSlice = createSlice({
         state.error = "";
       })
       .addCase(getConversationMessages.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(sendMessages.pending, (state, action) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(sendMessages.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.messages = [...state.messages, action.payload];
+        state.error = "";
+        // Sau khi gửi tin nhắn mới, sẽ thêm latestMessage vào cuộc trò chuyện, lọc ra các cuộc trò chuyện khác => nối cuộc trò chuyện đang gửi tn vào (unshift)
+        let conversation = {
+          ...action.payload.conversation,
+          latestMessage: action.payload,
+        };
+        let newConvos = [...state.conversations].filter(
+          (c) => c._id !== conversation._id
+        );
+        newConvos.unshift(conversation);
+        state.conversations = newConvos;
+      })
+      .addCase(sendMessages.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });

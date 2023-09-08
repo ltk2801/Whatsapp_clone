@@ -7,7 +7,6 @@ export default function CameraIcon() {
       height="53"
       width="53"
       preserveAspectRatio="xMidYMid meet"
-      class=""
       version="1.1"
       x="0px"
       y="0px"

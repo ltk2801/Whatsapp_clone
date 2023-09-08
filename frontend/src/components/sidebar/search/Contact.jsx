@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { open_create_conversation } from "../../../features/chatSlice";
 import { capitalize } from "../../../utils/string";
 
-const Contact = ({ contact }) => {
+const Contact = ({ contact, setSearchResult }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { access_token } = user;
@@ -13,8 +13,9 @@ const Contact = ({ contact }) => {
     token: access_token,
   };
 
-  const openConversation = () => {
-    dispatch(open_create_conversation(values));
+  const openConversation = async () => {
+    await dispatch(open_create_conversation(values));
+    setSearchResult([]);
   };
 
   return (
