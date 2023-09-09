@@ -15,12 +15,12 @@ const Home = ({ socket }) => {
   const { user } = useSelector((state) => state.user);
   const { activeConversation } = useSelector((state) => state.chat);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [typing, setTyping] = useState(false);
   // join user into the socket io
   useEffect(() => {
     socket.emit("join", user?._id);
     // get online users
     socket.on("get-online-users", (users) => {
-      console.log("online user", users);
       setOnlineUsers(users);
     });
   }, [user, socket]);
@@ -38,15 +38,18 @@ const Home = ({ socket }) => {
     socket.on("receive message", (message) => {
       dispatch(updateMessagesAndConversation(message));
     });
+    //  typing stop typing message when user is typing
+    socket.on("typing", (conversation) => setTyping(conversation));
+    socket.on("stop typing", () => setTyping(false));
   }, [socket, dispatch]);
   return (
     <div className="min-h-screen dark:bg-dark_bg_1 flex items-center justify-center  overflow-hidden">
       {/* container */}
       <div className="container h-screen py-[19px] flex ">
         {/* Sidebar */}
-        <Sidebar onlineUsers={onlineUsers} />
+        <Sidebar onlineUsers={onlineUsers} typing={typing} />
         {activeConversation._id ? (
-          <ChatContainer onlineUsers={onlineUsers} />
+          <ChatContainer onlineUsers={onlineUsers} typing={typing} />
         ) : (
           <WhatsappHome />
         )}

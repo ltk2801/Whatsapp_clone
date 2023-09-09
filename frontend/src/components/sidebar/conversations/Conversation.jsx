@@ -11,7 +11,7 @@ import { dateFormatHandler } from "../../../utils/formatDate";
 import { capitalize } from "../../../utils/string";
 import { GoDotFill } from "react-icons/go";
 
-const Conversation = ({ convo, socket, online }) => {
+const Conversation = ({ convo, socket, online, typing }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { activeConversation } = useSelector((state) => state.chat);
@@ -69,15 +69,19 @@ const Conversation = ({ convo, socket, online }) => {
               <div>
                 <div className="flex items-center gap-x-1 dark:text-dark_text_2">
                   <div className="flex-1 items-center gap-x-1 dark:text-dark_text_2">
-                    <p>
-                      {" "}
-                      {convo?.latestMessage?.sender?._id === user?._id
-                        ? "Bạn: "
-                        : ""}
-                      {convo?.latestMessage?.message.length > 40
-                        ? `${convo?.latestMessage?.message.slice(0, 40)}...`
-                        : convo?.latestMessage?.message}
-                    </p>
+                    {typing === convo._id ? (
+                      <p className="text-green_1">Đang nhập...</p>
+                    ) : (
+                      <p>
+                        {" "}
+                        {convo?.latestMessage?.sender?._id === user?._id
+                          ? "Bạn: "
+                          : ""}
+                        {convo?.latestMessage?.message.length > 40
+                          ? `${convo?.latestMessage?.message.slice(0, 40)}...`
+                          : convo?.latestMessage?.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
