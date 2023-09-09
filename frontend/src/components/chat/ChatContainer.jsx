@@ -2,12 +2,13 @@ import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getConversationMessages } from "../../features/chatSlice";
+import { getConversationId } from "../../utils/chat";
 import ChatAction from "./actions/ChatAction";
 
 import ChatHeader from "./header/ChatHeader";
 import ChatMessages from "./messages/ChatMessages";
 
-const ChatContainer = () => {
+const ChatContainer = ({ onlineUsers }) => {
   const { activeConversation } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -28,7 +29,13 @@ const ChatContainer = () => {
       {/* Container */}
       <div>
         {/* Chat Header */}
-        <ChatHeader />
+        <ChatHeader
+          online={onlineUsers.find((u) =>
+            u.userId === getConversationId(user, activeConversation.users)
+              ? true
+              : false
+          )}
+        />
         {/* Chat messages */}
         <ChatMessages />
         {/* Chat Action */}

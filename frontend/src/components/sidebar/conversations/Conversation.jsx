@@ -9,8 +9,9 @@ import {
 } from "../../../utils/chat";
 import { dateFormatHandler } from "../../../utils/formatDate";
 import { capitalize } from "../../../utils/string";
+import { GoDotFill } from "react-icons/go";
 
-const Conversation = ({ convo, socket }) => {
+const Conversation = ({ convo, socket, online }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { activeConversation } = useSelector((state) => state.chat);
@@ -39,15 +40,25 @@ const Conversation = ({ convo, socket }) => {
         {/* Container */}
         <div className="relative w-full flex items-center justify-between py-[10px]">
           {/* Left */}
-          <div className="flex items-center gap-x-3">
+          <div className="flex items-center gap-x-4">
             {/* Conversation user picture */}
-            <div className="relative min-w-[50px] max-w-[50px] h-[50px] rounded-full overflow-hidden">
-              <img
-                src={getConversationPicture(user, convo.users)}
-                alt="conversation img"
-                className="w-full h-full !important object-cover rounded-full"
-              />
+            <div className="relative">
+              <div
+                className={` min-w-[50px] max-w-[50px] h-[50px] rounded-full overflow-hidden 
+        
+            `}
+              >
+                <img
+                  src={getConversationPicture(user, convo.users)}
+                  alt="conversation img"
+                  className="w-full h-full !important object-cover rounded-full"
+                />
+              </div>
+              {online ? (
+                <GoDotFill className="absolute -bottom-2 -right-3 w-[32px] h-[32px] online z-auto" />
+              ) : null}
             </div>
+
             {/* Conversation name & message */}
             <div className="w-full flex flex-col">
               {/* Conversation name */}
@@ -60,6 +71,9 @@ const Conversation = ({ convo, socket }) => {
                   <div className="flex-1 items-center gap-x-1 dark:text-dark_text_2">
                     <p>
                       {" "}
+                      {convo?.latestMessage?.sender?._id === user?._id
+                        ? "Bạn: "
+                        : ""}
                       {convo?.latestMessage?.message.length > 40
                         ? `${convo?.latestMessage?.message.slice(0, 40)}...`
                         : convo?.latestMessage?.message}

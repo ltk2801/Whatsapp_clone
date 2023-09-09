@@ -1,4 +1,5 @@
 import React from "react";
+import { GoDotFill } from "react-icons/go";
 import { useSelector } from "react-redux";
 import { DotsIcon, SearchLargeIcon } from "../../../svg";
 import {
@@ -7,7 +8,7 @@ import {
 } from "../../../utils/chat";
 import { capitalize } from "../../../utils/string";
 
-const ChatHeader = () => {
+const ChatHeader = ({ online }) => {
   const { activeConversation } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
   // const { name, picture } = activeConversation;
@@ -18,19 +19,24 @@ const ChatHeader = () => {
         {/* Left */}
         <div className="flex items-center gap-x-4">
           {/* Conversation image */}
-          <button className="btn">
+          <button className="relative btn">
             <img
               src={getConversationPicture(user, activeConversation.users)}
               alt="conversation pic"
               className="h-full w-full rounded-full object-cover"
             />
+            {online ? (
+              <GoDotFill className="absolute -bottom-2 -right-3 w-[32px] h-[32px] online z-auto" />
+            ) : null}
           </button>
           {/* Conversation nmae and online status  */}
           <div className="flex flex-col">
             <h1 className="dark:text-white text-md font-bold">
               {capitalize(getConversationName(user, activeConversation.users))}
             </h1>
-            <span className="text-sm dark:text-dark_svg_2">Đang hoạt động</span>
+            <span className="text-sm dark:text-dark_svg_2">
+              {online ? "Đang hoạt động" : ""}
+            </span>
           </div>
         </div>
         {/* Right */}

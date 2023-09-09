@@ -6,7 +6,7 @@ import { Notification } from "./notifications";
 import Search from "./search/Search";
 import SearchResult from "./search/SearchResult";
 
-const Sidebar = () => {
+const Sidebar = ({ onlineUsers }) => {
   const [searchResult, setSearchResult] = useState([]);
 
   return (
@@ -31,7 +31,7 @@ const Sidebar = () => {
       ) : (
         <>
           {" "}
-          <Conversations />
+          <Conversations onlineUsers={onlineUsers} />
         </>
       )}
     </div>

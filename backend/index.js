@@ -28,5 +28,5 @@ const io = new Server(
 
 io.on("connection", (socket) => {
   logger.info("socket io connected successfully.");
-  socketServer(socket);
+  socketServer(socket, io);
 });
