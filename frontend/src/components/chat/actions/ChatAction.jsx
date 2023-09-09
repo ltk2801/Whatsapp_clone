@@ -6,8 +6,9 @@ import Attachments from "./Attachments";
 import EmojiPickerComponent from "./EmojiPickerComponent";
 import InputAction from "./InputAction";
 import { ClipLoader } from "react-spinners";
+import SocketContext from "../../../context/SocketContext";
 
-const ChatAction = () => {
+const ChatAction = ({ socket }) => {
   const [message, setMessage] = useState("");
   const { activeConversation, status } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
@@ -29,7 +30,8 @@ const ChatAction = () => {
   const SendMessageHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await dispatch(sendMessages(values));
+    let newMsg = await dispatch(sendMessages(values));
+    socket.emit("send message", newMsg.payload);
     setMessage("");
     setLoading(false);
   };
@@ -76,4 +78,10 @@ const ChatAction = () => {
   );
 };
 
-export default ChatAction;
+const ChatActionWithContext = (props) => (
+  <SocketContext.Consumer>
+    {(socket) => <ChatAction {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
+
+export default ChatActionWithContext;

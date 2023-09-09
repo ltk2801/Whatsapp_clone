@@ -28,10 +28,10 @@ export const create_open_conversation = async (req, res, next) => {
     if (existed_conversation) {
       res.status(200).json(existed_conversation);
     } else {
-      const receiver_user = await findUser(receiver_id);
+      //  const receiver_user = await findUser(receiver_id);
       const convoData = {
-        name: receiver_user.name,
-        picture: receiver_user.picture,
+        name: "conversation name",
+        picture: "covnersation picture",
         isGroup: false,
         users: [sender_id, receiver_id],
       };
