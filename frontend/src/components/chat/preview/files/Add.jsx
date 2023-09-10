@@ -64,7 +64,7 @@ const Add = () => {
   return (
     <>
       <div
-        className="w-14 h-14 border dark:border-white rounded-md flex items-center justify-center cursor-pointer"
+        className="fileThumbnail w-14 h-14 border dark:border-white rounded-md flex items-center justify-center cursor-pointer transform transition-transform duration-300 ease-in-out"
         onClick={() => inputRef.current.click()}
       >
         <span className="rotate-45">

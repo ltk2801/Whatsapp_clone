@@ -66,7 +66,11 @@ const ChatAction = ({ socket }) => {
           textRef={textRef}
         />
         {/* Send button */}
-        <button type="submit" className="btn" disabled={status === "loading"}>
+        <button
+          type="submit"
+          className="btn cursor-pointer"
+          disabled={status === "loading" || message === ""}
+        >
           {status === "loading" && loading ? (
             <ClipLoader color="#E9EDEF" size={25} />
           ) : (
