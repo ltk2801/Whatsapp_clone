@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { logoutChat } from "../../../features/chatSlice";
 import { logout } from "../../../features/userSlice";
 
 const Menu = () => {
@@ -22,7 +23,10 @@ const Menu = () => {
         </li>
         <li
           className="py-3 pl-5 cursor-pointer hover:bg-dark_bg_3"
-          onClick={() => dispatch(logout())}
+          onClick={() => {
+            dispatch(logout());
+            dispatch(logoutChat());
+          }}
         >
           <span>Đăng xuất</span>
         </li>

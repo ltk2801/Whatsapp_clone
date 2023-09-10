@@ -11,6 +11,7 @@ const initialState = {
   activeConversation: {},
   messages: [],
   notifications: [],
+  files: [],
 };
 
 // functions get & create_open conversation
@@ -111,6 +112,15 @@ export const chatSlice = createSlice({
     resetActiveConversation: (state, action) => {
       state.activeConversation = {};
     },
+    logoutChat: (state) => {
+      state.status = "";
+      state.error = "";
+      state.conversations = [];
+      state.activeConversation = {};
+      state.messages = [];
+      state.notifications = [];
+      state.files = [];
+    },
     updateMessagesAndConversation: (state, action) => {
       // update messages
       let convo = state.activeConversation;
@@ -127,6 +137,9 @@ export const chatSlice = createSlice({
       );
       newConvos.unshift(conversation);
       state.conversations = newConvos;
+    },
+    addFiles: (state, action) => {
+      state.files = [...state.files, action.payload];
     },
   },
   extraReducers(builder) {
@@ -200,6 +213,8 @@ export const {
   setActiveConversation,
   resetActiveConversation,
   updateMessagesAndConversation,
+  addFiles,
+  logoutChat,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

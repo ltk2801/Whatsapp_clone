@@ -1,12 +1,7 @@
 import React from "react";
-import {
-  CameraIcon,
-  ContactIcon,
-  DocumentIcon,
-  PhotoIcon,
-  PollIcon,
-  StickerIcon,
-} from "../../../svg";
+import { CameraIcon, ContactIcon, PollIcon, StickerIcon } from "../../../svg";
+import DocAttachment from "./menuAttachments/DocAttachment";
+import PhotoAttachment from "./menuAttachments/PhotoAttachment";
 
 const Menu = () => {
   return (
@@ -21,11 +16,7 @@ const Menu = () => {
           <ContactIcon />
         </button>
       </li>
-      <li>
-        <button type="button" className="bg-[#5F66CD] rounded-full">
-          <DocumentIcon />
-        </button>
-      </li>
+      <DocAttachment />
       <li>
         <button type="button" className="bg-[#D3396D] rounded-full">
           <CameraIcon />
@@ -36,11 +27,7 @@ const Menu = () => {
           <StickerIcon />
         </button>
       </li>
-      <li>
-        <button type="button" className="bg-[#BF95CF] rounded-full">
-          <PhotoIcon />
-        </button>
-      </li>
+      <PhotoAttachment />
     </ul>
   );
 };

@@ -6,24 +6,26 @@ import SocketContext from "../../../context/SocketContext";
 const InputAction = ({ message, setMessage, textRef, socket }) => {
   const [typing, setTyping] = useState(false);
   const { activeConversation } = useSelector((state) => state.chat);
+  let typingInterval;
+  let timer = 3000;
 
   const onChangeHandler = (e) => {
     setMessage(e.target.value);
+
     // Typing
     if (!typing) {
       setTyping(true);
       socket.emit("typing", activeConversation._id);
     }
-    // Stop typing
-    let lastTypingTime = new Date().getTime();
-    let timer = 3000;
+    // Xóa hàm hẹn giờ kiểm tra typing trước khi tạo một cái mới
+    clearInterval(typingInterval);
 
-    setTimeout(() => {
-      let timeNow = new Date().getTime();
-      let timeDiff = timeNow - lastTypingTime;
-      if (timeDiff >= timer && typing) {
+    // Tạo hàm hẹn giờ kiểm tra typing mới
+    typingInterval = setInterval(() => {
+      if (typing) {
         socket.emit("stop typing", activeConversation._id);
         setTyping(false);
+        clearInterval(typingInterval); // Xóa hàm hẹn giờ sau khi gửi "stop typing"
       }
     }, timer);
   };
