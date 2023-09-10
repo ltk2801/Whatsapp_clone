@@ -42,6 +42,9 @@
   .online {
     color: #16a34a;
   }
+  .hview {
+    height: calc(100vh - 40vh);
+  }
 }
 
 /* ---------------------Animations---------------------------- */

@@ -7,9 +7,10 @@ import ChatAction from "./actions/ChatAction";
 
 import ChatHeader from "./header/ChatHeader";
 import ChatMessages from "./messages/ChatMessages";
+import FilesPreview from "./preview/files/FilesPreview";
 
 const ChatContainer = ({ onlineUsers, typing }) => {
-  const { activeConversation } = useSelector((state) => state.chat);
+  const { activeConversation, files } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { access_token } = user;
@@ -36,10 +37,16 @@ const ChatContainer = ({ onlineUsers, typing }) => {
               : false
           )}
         />
-        {/* Chat messages */}
-        <ChatMessages typing={typing} />
-        {/* Chat Action */}
-        <ChatAction />
+        {files.length > 0 ? (
+          <FilesPreview />
+        ) : (
+          <>
+            {/* Chat messages */}
+            <ChatMessages typing={typing} />
+            {/* Chat Action */}
+            <ChatAction />
+          </>
+        )}
       </div>
     </div>
   );

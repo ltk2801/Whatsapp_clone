@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { addFiles } from "../../../../features/chatSlice";
 import { DocumentIcon } from "../../../../svg";
+import { getFileType } from "../../../../utils/file";
 
 const DocAttachment = () => {
   const inputRef = useRef(null);
@@ -44,7 +45,7 @@ const DocAttachment = () => {
           dispatch(
             addFiles({
               file: file,
-              type: file.type.split("/")[1],
+              type: getFileType(file.type),
             })
           );
         };
@@ -64,6 +65,7 @@ const DocAttachment = () => {
       <input
         type="file"
         hidden
+        multiple
         ref={inputRef}
         accept="application/*,text/*,audio/*"
         onChange={documentHandler}
