@@ -21,6 +21,9 @@ const FileViewer = ({ activeIndex }) => {
             />
             {/* No preview text */}
             <h1 className="dark:text-dark_text_2 text-2xl">
+              ( Không có bản xem trước )
+            </h1>
+            <h1 className="dark:text-dark_text_2 text-2xl">
               {files[activeIndex].file.name}
             </h1>
           </div>

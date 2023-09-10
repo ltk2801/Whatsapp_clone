@@ -125,7 +125,14 @@ export const chatSlice = createSlice({
       // update messages
       let convo = state.activeConversation;
       if (convo._id === action.payload.conversation._id) {
-        state.messages = [...state.messages, action.payload];
+        // kiểm tra có bị double tin nhán không
+        const isMessageDuplicate = state.messages.some(
+          (message) => message._id === action.payload._id
+        );
+
+        if (!isMessageDuplicate) {
+          state.messages = [...state.messages, action.payload];
+        }
       }
       // update conversations
       let conversation = {
@@ -205,6 +212,7 @@ export const chatSlice = createSlice({
         );
         newConvos.unshift(conversation);
         state.conversations = newConvos;
+        state.files = [];
       })
       .addCase(sendMessages.rejected, (state, action) => {
         state.status = "failed";

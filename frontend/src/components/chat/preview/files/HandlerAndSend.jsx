@@ -1,9 +1,34 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ClipLoader } from "react-spinners";
+import SocketContext from "../../../../context/SocketContext";
+import { clearFiles, sendMessages } from "../../../../features/chatSlice";
 import { SendIcon } from "../../../../svg";
+import { uploadFiles } from "../../../../utils/uploadFile";
 import Add from "./Add";
-const HandlerAndSend = ({ setActiveIndex, activeIndex }) => {
-  const { files } = useSelector((state) => state.chat);
+const HandlerAndSend = ({ setActiveIndex, activeIndex, message, socket }) => {
+  const dispatch = useDispatch();
+  const { files, status, activeConversation } = useSelector(
+    (state) => state.chat
+  );
+  const { user } = useSelector((state) => state.user);
+  const { access_token } = user;
+
+  const sendMessageHandler = async (e) => {
+    // console.log(files, message);
+    e.preventDefault();
+    // upload files first to cloudy
+    const uploaded_files = await uploadFiles(files);
+    // send the message
+    const values = {
+      token: access_token,
+      message,
+      convo_id: activeConversation._id,
+      files: uploaded_files.length > 0 ? uploaded_files : [],
+    };
+    let newMsg = await dispatch(sendMessages(values));
+    socket.emit("send message", newMsg.payload);
+  };
 
   return (
     <div className="w-[97%] flex items-center justify-between mt-2 border-t dark:border-dark_border_2">
@@ -38,11 +63,24 @@ const HandlerAndSend = ({ setActiveIndex, activeIndex }) => {
         {<Add setActiveIndex={setActiveIndex} />}
       </div>
       {/* Send button */}
-      <div className="bg-green_1 w-16 h-16 mt-2 rounded-full flex items-center justify-center cursor-pointer">
-        <SendIcon className="fill-white" />
+      <div
+        onClick={(e) => sendMessageHandler(e)}
+        className="bg-green_1 w-16 h-16 mt-2 rounded-full flex items-center justify-center cursor-pointer"
+        disabled={status === "loading"}
+      >
+        {status === "loading" ? (
+          <ClipLoader color="#E9EDEF" size={25} />
+        ) : (
+          <SendIcon className="fill-white" />
+        )}
       </div>
     </div>
   );
 };
+const HandlerAndSendWithSocket = (props) => (
+  <SocketContext.Consumer>
+    {(socket) => <HandlerAndSend {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
 
-export default HandlerAndSend;
+export default HandlerAndSendWithSocket;

@@ -22,6 +22,7 @@ const FilesPreview = () => {
           <HandlerAndSend
             setActiveIndex={setActiveIndex}
             activeIndex={activeIndex}
+            message={message}
           />
         </div>
       </div>
