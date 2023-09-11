@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChatContainer } from "../components/chat";
 import Call from "../components/chat/call/Call";
@@ -10,10 +10,19 @@ import {
   resetActiveConversation,
   updateMessagesAndConversation,
 } from "../features/chatSlice";
+import {
+  getConversationId,
+  getConversationName,
+  getConversationPicture,
+} from "../utils/chat";
+import Peer from "simple-peer";
 
 const callData = {
+  socketId: "",
   receiveingCall: false,
   callEnded: false,
+  name: "",
+  picture: "",
 };
 
 const Home = ({ socket }) => {
@@ -24,8 +33,11 @@ const Home = ({ socket }) => {
   const [typing, setTyping] = useState(false);
   // call
   const [call, setCall] = useState(callData);
+  const [stream, setStream] = useState();
   const { receiveingCall, callEnded } = call;
   const [callAccepted, setCallAccepted] = useState(false);
+  const myVideo = useRef();
+  const userVideo = useRef();
 
   // join user into the socket io
   useEffect(() => {
@@ -35,6 +47,60 @@ const Home = ({ socket }) => {
       setOnlineUsers(users);
     });
   }, [user, socket]);
+
+  // Call stream,
+  useEffect(() => {
+    setupMedia();
+    socket.on("setup socket", (id) => {
+      setCall({ ...call, socketId: id });
+    });
+    // khi nhận được sự kiện call user từ server
+    socket.on("call user", (data) => {
+      setCall({
+        ...call,
+        socketId: data.from,
+        name: data.name,
+        picture: data.picture,
+        signal: data.signal,
+        receiveingCall: true,
+      });
+    });
+  }, []);
+  // call user function
+  const callUser = () => {
+    enableMedia();
+    setCall({
+      ...call,
+      name: getConversationName(user, activeConversation.users),
+      picture: getConversationPicture(user, activeConversation.users),
+    });
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream: stream,
+    });
+    peer.on("signal", (data) => {
+      socket.emit("call user", {
+        userToCall: getConversationId(user, activeConversation.users),
+        signal: data,
+        from: call.socketId,
+        name: user.name,
+        picture: user.picture,
+      });
+    });
+  };
+  // set up media function
+  const setupMedia = () => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setStream(stream);
+      });
+  };
+  // mở media user
+  const enableMedia = () => {
+    myVideo.current.srcObject = stream;
+  };
 
   // get conversations
   useEffect(() => {
@@ -61,14 +127,25 @@ const Home = ({ socket }) => {
           {/* Sidebar */}
           <Sidebar onlineUsers={onlineUsers} typing={typing} />
           {activeConversation._id ? (
-            <ChatContainer onlineUsers={onlineUsers} typing={typing} />
+            <ChatContainer
+              onlineUsers={onlineUsers}
+              typing={typing}
+              callUser={callUser}
+            />
           ) : (
             <WhatsappHome />
           )}
         </div>
       </div>
       {/* Call */}
-      <Call call={call} setCall={setCall} callAccepted={callAccepted} />
+      <Call
+        call={call}
+        setCall={setCall}
+        callAccepted={callAccepted}
+        userVideo={userVideo}
+        myVideo={myVideo}
+        stream={stream}
+      />
     </>
   );
 };

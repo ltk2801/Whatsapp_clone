@@ -16,7 +16,9 @@ const Header = () => {
         {/* End to end encrypted text */}
         <p className="flex items-center">
           <LockIcon className="fill-white scale-75" />
-          <span className="text-xs text-white">Được mã hóa đầu cuối</span>
+          <span className="text-xs text-white">
+            Cuộc trò chuyện được bảo mật
+          </span>
         </p>
         {/* Add contact to call */}
         <button className="btn">

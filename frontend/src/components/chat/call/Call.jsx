@@ -5,7 +5,7 @@ import CallArea from "./CallArea";
 import Header from "./Header";
 import Ringing from "./Ringing";
 
-const Call = ({ call, setCall, callAccepted }) => {
+const Call = ({ call, setCall, callAccepted, userVideo, myVideo, stream }) => {
   const { receiveingCall, callEnded } = call;
   const [showActions, setShowActions] = useState(false);
 
@@ -24,6 +24,29 @@ const Call = ({ call, setCall, callAccepted }) => {
           <CallArea name="Ace" />
           {/* Call actions */}
           {showActions && <CallAction />}
+        </div>
+        {/* Video streams */}
+        <div>
+          {/* User video */}
+          <div>
+            <video
+              ref={userVideo}
+              playsInline
+              muted
+              autoPlay
+              className="largeVideoCall"
+            ></video>
+          </div>
+          {/* My video */}
+          <div>
+            <video
+              ref={myVideo}
+              playsInline
+              muted
+              autoPlay
+              className={`smallVideoCall ${showActions ? "moveVideoCall" : ""}`}
+            ></video>
+          </div>
         </div>
       </div>
 

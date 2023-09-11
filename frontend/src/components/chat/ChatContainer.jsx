@@ -9,7 +9,7 @@ import ChatHeader from "./header/ChatHeader";
 import ChatMessages from "./messages/ChatMessages";
 import FilesPreview from "./preview/files/FilesPreview";
 
-const ChatContainer = ({ onlineUsers, typing }) => {
+const ChatContainer = ({ onlineUsers, typing, callUser }) => {
   const { activeConversation, files } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -31,6 +31,7 @@ const ChatContainer = ({ onlineUsers, typing }) => {
       <div>
         {/* Chat Header */}
         <ChatHeader
+          callUser={callUser}
           online={onlineUsers.find((u) =>
             u.userId === getConversationId(user, activeConversation.users)
               ? true

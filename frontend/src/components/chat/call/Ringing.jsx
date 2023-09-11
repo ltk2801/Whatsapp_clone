@@ -55,7 +55,7 @@ const Ringing = ({ call, setCall }) => {
         </ul>
       </div>
       {/* Ringtone */}
-      <audio src="../audio/ringtone.mp3" autoPlay loop />
+      {/* <audio src="../audio/ringtone.mp3" autoPlay loop /> */}
     </div>
   );
 };

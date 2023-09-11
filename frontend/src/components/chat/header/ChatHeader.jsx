@@ -1,6 +1,7 @@
 import React from "react";
 import { GoDotFill } from "react-icons/go";
 import { useSelector } from "react-redux";
+import SocketContext from "../../../context/SocketContext";
 import { DotsIcon, SearchLargeIcon } from "../../../svg";
 import {
   getConversationName,
@@ -8,7 +9,10 @@ import {
 } from "../../../utils/chat";
 import { capitalize } from "../../../utils/string";
 
-const ChatHeader = ({ online }) => {
+import { FaVideo } from "react-icons/fa";
+import { IoCallSharp } from "react-icons/io5";
+
+const ChatHeader = ({ online, callUser, socket }) => {
   const { activeConversation } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
   // const { name, picture } = activeConversation;
@@ -41,6 +45,20 @@ const ChatHeader = ({ online }) => {
         </div>
         {/* Right */}
         <ul className="flex items-center gap-x-2.5">
+          {online ? (
+            <li onClick={() => callUser()}>
+              <button className="btn">
+                <FaVideo className="dark:fill-dark_svg_1 w-[20px] h-[20px]" />
+              </button>
+            </li>
+          ) : null}
+          {online ? (
+            <li>
+              <button className="btn">
+                <IoCallSharp className="dark:fill-dark_svg_1 w-[20px] h-[20px]" />
+              </button>
+            </li>
+          ) : null}
           <li>
             <button className="btn">
               <SearchLargeIcon className="dark:fill-dark_svg_1" />
@@ -57,4 +75,10 @@ const ChatHeader = ({ online }) => {
   );
 };
 
-export default ChatHeader;
+const ChatHeaderWithSocket = (props) => (
+  <SocketContext.Consumer>
+    {(socket) => <ChatHeader {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
+
+export default ChatHeaderWithSocket;
