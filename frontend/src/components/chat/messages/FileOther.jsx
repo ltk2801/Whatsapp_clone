@@ -2,7 +2,6 @@ import React from "react";
 import { FiDownload } from "react-icons/fi";
 
 const FileOther = ({ file, type }) => {
-  console.log(file);
   return (
     <div className="bg-green_4 p-2 rounded-lg">
       {/* Container */}
