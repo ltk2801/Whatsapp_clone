@@ -4,8 +4,8 @@ import { FaCheck } from "react-icons/fa";
 import { useState } from "react";
 import { useEffect } from "react";
 
-const Ringing = ({ call, setCall }) => {
-  const { receiveingCall, callEnded } = call;
+const Ringing = ({ call, setCall, answerCall, endCall }) => {
+  const { name, picture } = call;
   const [timer, setTimer] = useState(0);
   let interval;
   const handlerTimer = () => {
@@ -29,25 +29,25 @@ const Ringing = ({ call, setCall }) => {
         {/* Call infos */}
         <div className="flex items-center gap-x-2">
           <img
-            src="https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg"
+            src={picture}
             alt={`caller profile pic`}
-            className="w-28 h-28 rounded-full"
+            className="w-28 h-28 rounded-full object-cover"
           />
           <div>
             <h1 className="dark:text-white">
-              <b>Ace</b>
+              <b>{name}</b>
             </h1>
             <span className="dark:text-dark_text_2">Whatsapp video...</span>
           </div>
         </div>
         {/* Call actions */}
         <ul className="flex items-center gap-x-2">
-          <li>
+          <li onClick={() => endCall()}>
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-red-500">
               <CloseIcon className="fill-white w-5" />
             </button>
           </li>
-          <li>
+          <li onClick={answerCall}>
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500">
               <FaCheck className="fill-white w-5 " />
             </button>
@@ -55,7 +55,7 @@ const Ringing = ({ call, setCall }) => {
         </ul>
       </div>
       {/* Ringtone */}
-      {/* <audio src="../audio/ringtone.mp3" autoPlay loop /> */}
+      <audio src="../audio/ringtone.mp3" autoPlay loop />
     </div>
   );
 };

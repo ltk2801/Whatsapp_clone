@@ -48,14 +48,27 @@ export default function (socket, io) {
     socket.in(conversation).emit("stop typing");
   });
   // call
+  // ------ call user
   socket.on("call user", (data) => {
+    // nhận được id của người nhận cuộc gọi
     let userId = data.userToCall;
+    // Tìm kiếm người nhận cuộc gọi có onl không
     let userSocketId = onlineUsers.find((user) => user.userId === userId);
+    // nếu có sẽ gửi sự kiện call user cho socketID của người nhận
     io.to(userSocketId.socketId).emit("call user", {
       signal: data.signal,
       from: data.from,
       name: data.name,
       picture: data.picture,
     });
+  });
+  // ------- answer call user
+  socket.on("answer call", (data) => {
+    io.to(data.to).emit("call accepted", data.signal);
+  });
+
+  // -------- end call
+  socket.on("end call", (id) => {
+    io.to(id).emit("end call");
   });
 }

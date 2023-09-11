@@ -7,7 +7,7 @@ import {
 } from "react-icons/bs";
 import { VscUnmute } from "react-icons/vsc";
 
-const CallAction = () => {
+const CallAction = ({ endCall }) => {
   return (
     <div className="h-22 w-full absolute bottom-0 z-40 px-1">
       {/* Container */}
@@ -33,7 +33,7 @@ const CallAction = () => {
               <BsFillMicMuteFill className="fill-white   h-[22px] w-[22px]" />
             </button>
           </li>
-          <li>
+          <li onClick={() => endCall()}>
             <button className="btn_secondary bg-red-600 rotate-[135deg]">
               <BsTelephoneFill className="fill-white  h-[22px] w-[22px]" />
             </button>
