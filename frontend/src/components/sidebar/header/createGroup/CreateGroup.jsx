@@ -13,8 +13,9 @@ import {
 } from "../../../../features/chatSlice";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import SocketContext from "../../../../context/SocketContext";
 
-const CreateGroup = ({ setShowCreateGroup }) => {
+const CreateGroup = ({ setShowCreateGroup, socket }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { status, error } = useSelector((state) => state.chat);
@@ -70,6 +71,7 @@ const CreateGroup = ({ setShowCreateGroup }) => {
       let newConvo = await dispatch(createGroupConversation(values));
       if (newConvo.payload?._id) {
         await dispatch(getConversations(user.access_token));
+        socket.emit("new group", newConvo.payload);
         setShowCreateGroup(false);
         toast.success("Tạo nhóm chat thành công !");
       }
@@ -119,5 +121,10 @@ const CreateGroup = ({ setShowCreateGroup }) => {
     </div>
   );
 };
+const CreateGroupWithContext = (props) => (
+  <SocketContext.Consumer>
+    {(socket) => <CreateGroup {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
 
-export default CreateGroup;
+export default CreateGroupWithContext;

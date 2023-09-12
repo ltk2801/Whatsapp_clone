@@ -166,6 +166,9 @@ const Home = ({ socket }) => {
     if (user?.access_token) {
       dispatch(getConversations(user.access_token));
     }
+    socket.on("new group", () => {
+      dispatch(getConversations(user.access_token));
+    });
     dispatch(resetActiveConversation());
   }, [dispatch, user]);
 

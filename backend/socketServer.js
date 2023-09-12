@@ -38,6 +38,15 @@ export default function (socket, io) {
     });
   });
 
+  // receive new group chat
+  socket.on("new group", (conversation) => {
+    conversation.users.forEach((user) => {
+      if (user._id === conversation.admin._id) return;
+      // socket của thằng mà nhận được thì mới có sự kiện này
+      socket.in(user._id).emit("new group");
+    });
+  });
+
   // typing
   socket.on("typing", (conversation) => {
     // socket của conversation
