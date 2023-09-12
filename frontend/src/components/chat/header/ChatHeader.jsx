@@ -16,6 +16,7 @@ const ChatHeader = ({ online, callUser, socket }) => {
   const { activeConversation } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
   // const { name, picture } = activeConversation;
+
   return (
     <div className="h-[59px] dark:bg-dark_bg_2 flex items-center p16 select-none">
       {/* Container */}
@@ -25,7 +26,11 @@ const ChatHeader = ({ online, callUser, socket }) => {
           {/* Conversation image */}
           <button className="relative btn">
             <img
-              src={getConversationPicture(user, activeConversation.users)}
+              src={
+                activeConversation.isGroup
+                  ? activeConversation.picture
+                  : getConversationPicture(user, activeConversation.users)
+              }
               alt="conversation pic"
               className="h-full w-full rounded-full object-cover"
             />
@@ -36,7 +41,11 @@ const ChatHeader = ({ online, callUser, socket }) => {
           {/* Conversation nmae and online status  */}
           <div className="flex flex-col">
             <h1 className="dark:text-white text-md font-bold">
-              {capitalize(getConversationName(user, activeConversation.users))}
+              {activeConversation.isGroup
+                ? activeConversation.name
+                : capitalize(
+                    getConversationName(user, activeConversation.users)
+                  )}
             </h1>
             <span className="text-sm dark:text-dark_svg_2">
               {online ? "Đang hoạt động" : ""}

@@ -71,7 +71,6 @@ const Home = ({ socket }) => {
     });
     // khi nhận được sự kiện end call từ server
     socket.on("end call", () => {
-      console.log("Nhận được không");
       setShow(false);
       setCall({ ...call, callEnded: true, receiveingCall: false });
       myVideo.current.srcObject = null;

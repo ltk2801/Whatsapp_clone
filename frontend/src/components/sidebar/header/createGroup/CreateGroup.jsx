@@ -1,16 +1,23 @@
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ReturnIcon } from "../../../../svg";
 import MultipleSelect from "./MultipleSelect";
 import UnderlineInput from "./UnderlineInput";
 import { ClipLoader } from "react-spinners";
 import { FaCheck } from "react-icons/fa";
+import {
+  createGroupConversation,
+  getConversations,
+} from "../../../../features/chatSlice";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const CreateGroup = ({ setShowCreateGroup }) => {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const { status } = useSelector((state) => state.chat);
+  const { status, error } = useSelector((state) => state.chat);
   const [name, setName] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -49,6 +56,32 @@ const CreateGroup = ({ setShowCreateGroup }) => {
     }
   };
 
+  const createGroupHandler = async () => {
+    if (status !== "loading") {
+      let users = [];
+      selectedUsers.forEach((user) => {
+        users.push(user.value);
+      });
+      let values = {
+        name,
+        users,
+        token: user.access_token,
+      };
+      let newConvo = await dispatch(createGroupConversation(values));
+      if (newConvo.payload?._id) {
+        await dispatch(getConversations(user.access_token));
+        setShowCreateGroup(false);
+        toast.success("Tạo nhóm chat thành công !");
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (status === "failed") {
+      toast.error(error);
+    }
+  }, [error, status]);
+
   return (
     <div className="createGroupAnimation relative flex0030 h-full z-40">
       {/* Container */}
@@ -71,11 +104,14 @@ const CreateGroup = ({ setShowCreateGroup }) => {
         />
         {/* CREATE GROUP button */}
         <div className="absolute bottom-1/3 left-1/2 -translate-x-1/2 ">
-          <button className="btn bg-green_1 scale-150 hover:bg-green-500 ">
+          <button
+            className="btn bg-green_1 scale-150 hover:bg-green-500 "
+            onClick={() => createGroupHandler()}
+          >
             {status === "loading" ? (
               <ClipLoader color="#E9EDEF" size={25} />
             ) : (
-              <FaCheck className="fill-white w-[22px] h-[22px] h-full " />
+              <FaCheck className="fill-white w-[22px] h-[22px]" />
             )}
           </button>
         </div>

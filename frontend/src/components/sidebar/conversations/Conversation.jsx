@@ -19,6 +19,7 @@ const Conversation = ({ convo, socket, online, typing }) => {
 
   const values = {
     receiver_id: getConversationId(user, convo.users),
+    isGroup: convo.isGroup ? convo._id : false,
     token: access_token,
   };
 
@@ -27,7 +28,7 @@ const Conversation = ({ convo, socket, online, typing }) => {
     socket.emit("join conversation", newConvo.payload._id);
   };
 
-  return convo.latestMessage ? (
+  return convo.latestMessage || convo.isGroup ? (
     <>
       <li
         onClick={() => openConversation()}
@@ -49,7 +50,11 @@ const Conversation = ({ convo, socket, online, typing }) => {
             `}
               >
                 <img
-                  src={getConversationPicture(user, convo.users)}
+                  src={
+                    convo.isGroup
+                      ? convo.picture
+                      : getConversationPicture(user, convo.users)
+                  }
                   alt="conversation img"
                   className="w-full h-full !important object-cover rounded-full"
                 />
@@ -63,7 +68,9 @@ const Conversation = ({ convo, socket, online, typing }) => {
             <div className="w-full flex flex-col">
               {/* Conversation name */}
               <h1 className="font-bold flex items-center gap-x-2">
-                {capitalize(getConversationName(user, convo.users))}
+                {convo.isGroup
+                  ? convo.name
+                  : capitalize(getConversationName(user, convo.users))}
               </h1>
               {/* Conversation message */}
               <div>
@@ -79,6 +86,8 @@ const Conversation = ({ convo, socket, online, typing }) => {
                           : ""}
                         {convo?.latestMessage?.message === ""
                           ? "Đã gửi files"
+                          : !convo.latestMessage
+                          ? ""
                           : `${
                               convo?.latestMessage?.message.length > 40
                                 ? `${convo?.latestMessage?.message.slice(

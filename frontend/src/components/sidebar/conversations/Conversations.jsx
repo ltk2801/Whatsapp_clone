@@ -4,7 +4,9 @@ import { getConversationId } from "../../../utils/chat";
 import Conversation from "./Conversation";
 
 const Conversations = ({ onlineUsers, typing }) => {
-  const { conversations } = useSelector((state) => state.chat);
+  const { conversations, activeConversation } = useSelector(
+    (state) => state.chat
+  );
   const { user } = useSelector((state) => state.user);
 
   return (
@@ -12,7 +14,12 @@ const Conversations = ({ onlineUsers, typing }) => {
       <ul>
         {conversations &&
           conversations
-            // .filter((c) => c.latestMessage || c._id === activeConversation._id)
+            .filter(
+              (c) =>
+                c.latestMessage ||
+                c._id === activeConversation._id ||
+                c.isGroup === true
+            )
             .map((convo) => {
               // check user đang online
               let check = onlineUsers.find(
@@ -22,7 +29,7 @@ const Conversations = ({ onlineUsers, typing }) => {
                 <Conversation
                   convo={convo}
                   key={convo._id}
-                  online={check ? true : false}
+                  online={!convo.isGroup && check ? true : false}
                   typing={typing}
                 />
               );

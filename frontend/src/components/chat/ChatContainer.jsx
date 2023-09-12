@@ -32,11 +32,15 @@ const ChatContainer = ({ onlineUsers, typing, callUser }) => {
         {/* Chat Header */}
         <ChatHeader
           callUser={callUser}
-          online={onlineUsers.find((u) =>
-            u.userId === getConversationId(user, activeConversation.users)
-              ? true
+          online={
+            activeConversation.isGroup === false
+              ? onlineUsers.find((u) =>
+                  u.userId === getConversationId(user, activeConversation.users)
+                    ? true
+                    : false
+                )
               : false
-          )}
+          }
         />
         {files.length > 0 ? (
           <FilesPreview />

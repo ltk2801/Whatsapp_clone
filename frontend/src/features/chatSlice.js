@@ -36,11 +36,11 @@ export const getConversations = createAsyncThunk(
 export const open_create_conversation = createAsyncThunk(
   "conversation/open_create",
   async (values, { rejectWithValue }) => {
-    const { token, receiver_id } = values;
+    const { token, receiver_id, isGroup } = values;
     try {
       const { data } = await axios.post(
         CONVERSATION_ENDPOINT,
-        { receiver_id },
+        { receiver_id, isGroup },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -87,6 +87,29 @@ export const sendMessages = createAsyncThunk(
           convo_id,
           files,
         },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // trả về response
+      return data;
+    } catch (error) {
+      // ở đây ra về message trong error khi lỗi
+      return rejectWithValue(error.response.data.error.message);
+    }
+  }
+);
+
+export const createGroupConversation = createAsyncThunk(
+  "conversation/create_group",
+  async (values, { rejectWithValue }) => {
+    const { token, name, users } = values;
+    try {
+      const { data } = await axios.post(
+        `${CONVERSATION_ENDPOINT}/group`,
+        { name, users },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -219,6 +242,18 @@ export const chatSlice = createSlice({
         state.files = [];
       })
       .addCase(sendMessages.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(createGroupConversation.pending, (state, action) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(createGroupConversation.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = "";
+      })
+      .addCase(createGroupConversation.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
