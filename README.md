@@ -8,5 +8,9 @@
   + Gửi file (image,video,audio, file docx,txt,pdf,...), gửi emoji. 
   + Tìm kiếm người dùng khác và kết nối tới họ.
   + Tạo nhóm chat và thêm người dùng vào cuộc trò chuyện nhóm.
+ 
+- frontend deloy in : netlify
+- backend deloy in : render
+- url : https://whatsappcloneltk.netlify.app
 
 - Link Demo : https://youtu.be/BjoLTea_EBg?si=tgD5_CxHXDrDbZLL
