@@ -83,7 +83,9 @@ const Conversation = ({ convo, socket, online, typing }) => {
                         {" "}
                         {convo?.latestMessage?.sender?._id === user?._id
                           ? "Bạn: "
-                          : `${convo.latestMessage.sender.name}: `}
+                          : !convo.latestMessage
+                          ? ""
+                          : `${convo?.latestMessage?.sender.name}: `}
                         {convo?.latestMessage?.message === ""
                           ? "Đã gửi files"
                           : !convo.latestMessage

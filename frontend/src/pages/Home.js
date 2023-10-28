@@ -105,7 +105,7 @@ const Home = ({ socket }) => {
     });
     peer.on("stream", (stream) => {
       userVideo.current.srcObject = stream;
-      console.log(userVideo.current.srcObject);
+      console.log("ID Stream của đối phương :", userVideo.current.srcObject);
     });
     socket.on("call accepted", (signal) => {
       setCallAccepted(true);

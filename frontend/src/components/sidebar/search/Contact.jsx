@@ -12,10 +12,12 @@ const Contact = ({ contact, setSearchResult, socket }) => {
   const values = {
     receiver_id: contact._id,
     token: access_token,
+    isGroup: false,
   };
 
   const openConversation = async () => {
     let newConvo = await dispatch(open_create_conversation(values));
+
     socket.emit("join conversation", newConvo.payload._id);
     setSearchResult([]);
   };
